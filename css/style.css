@@ -46,7 +46,7 @@ h6 {
 	margin: 0;
 	color: #111111;
 	font-weight: 400;
-	font-family: "Nunito Sans", sans-serif;
+	/* font-family: "Nunito Sans", sans-serif; */
 }
 
 h1 {
@@ -3849,3 +3849,10 @@ ol {
 		height: 250px;
 	}
 }
+
+
+
+
+h3,#abcd{
+	font-family: 'Satisfy', cursive !important;    
+}	
