@@ -30,6 +30,10 @@
 /* Template default CSS
 /*----------------------------------------*/
 
+h3,#abcd{
+	font-family: 'Satisfy', cursive !important;    
+}	
+
 html,
 body {
 	height: 100%;
@@ -3852,7 +3856,3 @@ ol {
 
 
 
-
-h3,#abcd{
-	font-family: 'Satisfy', cursive !important;    
-}	
