@@ -15,9 +15,21 @@ db = SQLAlchemy(app)
 class UserModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(200), nullable=False)
-    useremail = db.Column(db.String(200), nullable=False)
+    useremail = db.Column(db.String(200), nullable=False , unique= True)
     userpassword = db.Column(db.String(900), nullable=False)
     date_created = db.Column(db.DateTime , default = datetime.utcnow)
+
+    def __repr__(self):
+        return  "<Task %r>" % self.id
+
+# class for flower model
+
+class flowerModel(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    flowername = db.Column(db.String(200), nullable=False)
+    flowerdescription = db.Column(db.String(200), nullable=False)
+    flowerimage = db.Column(db.String(100),nullable=False  , unique= True)
+    flower_date_created = db.Column(db.DateTime , default = datetime.utcnow)
 
     def __repr__(self):
         return  "<Task %r>" % self.id
@@ -121,6 +133,33 @@ def SigninUser():
             else :
                 flash("Welcome")
                 return redirect(url_for("admin"))
+
+@app.route('/addflower' , methods=["GET", "POST"])
+def addflower():
+    if request.method == "POST":
+        flowername = request.form['flowername']
+        description = request.form['flowerdescription']
+        flowerimage = request.form['flowerimage']
+
+        flowerPreeset = flowerModel.query.filter_by(flowername = flowername).first()
+        if flowerPreeset:
+            flash("This flower already exists")
+            return redirect(url_for("admin"))
+
+        addedflower = flowerModel(flowername = flowername, flowerdescription = description, flowerimage = flowerimage)
+
+        try:
+            db.session.add(addedflower)
+            db.session.commit()
+            flash("your flower successfylly added")
+            return redirect("blog")
+        except Exception as e:
+            print(e)
+            return "Error occur during flower adding"
+
+    else:
+        return redirect("blog")
+
 
 
 if __name__ == '__main__':

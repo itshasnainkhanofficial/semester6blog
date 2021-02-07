@@ -1,6 +1,21 @@
 {% extends "layout.html" %}
 {% block content %}
 
+<!-- flash msg -->
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+  {% for msg in messages %}
+
+  <div class="alert alert-danger alert-dismissible fade show m-0" role="alert">
+    <strong>{{msg}}</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  {% endfor %}
+{% endif %}
+{% endwith %}
    <!-- Breadcrumb Section Begin -->
     <section class="breadcrumb-blog set-bg" data-setbg="../static/img/breadcrumb-bg.jpg">
         <div class="container">
