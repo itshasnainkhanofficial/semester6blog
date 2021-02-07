@@ -316,7 +316,7 @@ ol {
 -----------------------*/
 
 .header {
-	background: #ffffff;
+	background: #ffc107c9 !important;
 }
 
 .header__top {
@@ -3848,4 +3848,12 @@ ol {
 	.categories__text:before {
 		height: 250px;
 	}
+	
+	
+}
+
+
+
+.StylishFont{
+	font-family: 'Satisfy', cursive;    
 }

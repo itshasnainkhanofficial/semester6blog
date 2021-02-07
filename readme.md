@@ -12,3 +12,22 @@ Removing copyright information without the license will result in suspension of 
 2. installing
     1. virtualenv venv
     2. install flask
+
+
+
+# flaskProject
+pip install flask-sqlalchemy
+<!-- creating database -->
+first type python in cmd then
+from app import db
+db.create_all()
+<!-- https://pypi.org/project/bcrypt/ -->
+pip install bcrypt
+### get rid of error from vscode
+
+pip install pylint-flask
+pip install pylint-flask-sqlalchemy
+"python.linting.pylintArgs": ["--load-plugins", "pylint-flask", "pylint-flask-sqlalchemy"]
+https://pypi.org/project/python-dotenv/
+
+pip install python-dotenv

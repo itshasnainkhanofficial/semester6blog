@@ -8,10 +8,10 @@
 
     
     <!-- Google Font -->
-    <!-- <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
-    rel="stylesheet"> -->
 
-    <!-- <link rel="preconnect" href="https://fonts.gstatic.com"> -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
+    rel="stylesheet">
+
     <link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet">
   
 
@@ -25,17 +25,12 @@
     <link rel="stylesheet" href="{{url_for('static',filename='vendors/css/slicknav.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{url_for('static',filename='vendors/css/style.css')}}" type="text/css">
 
-<!-- <style>
-    #abcd{
-	font-family: 'Satisfy', cursive;    
-}	
-
-</style> -->
 
 
 
 </head>
 <body>
+    
       <!-- Page Preloder -->
       <div id="preloder">
         <div class="loader"></div>
@@ -48,7 +43,7 @@
        <div class="offcanvas-menu-overlay"></div>
        <div class="offcanvas-menu-wrapper">
            <div class="offcanvas__option">
-               <div class="offcanvas__links">
+               <div class="offcanvas__links ">
                    <a href="/signin">Sign in</a>
                    <a href="/signup">Sign up</a>
                </div>
@@ -57,7 +52,7 @@
            
            <div id="mobile-menu-wrap"></div>
            <div class="offcanvas__text">
-               <p>Free shipping, 30-day return or refund guarantee.</p>
+               <p class="StylishFont">This Blog is for nature Lovers. Are you?</p>
            </div>
        </div>
        <!-- Offcanvas Menu End -->
@@ -69,7 +64,7 @@
                    <div class="row">
                        <div class="col-lg-6 col-md-7">
                            <div class="header__top__left">
-                               <p>Free shipping, 30-day return or refund guarantee.</p>
+                               <p class="StylishFont">This Blog is for nature Lovers. Are you?</p>
                            </div>
                        </div>
                        <div class="col-lg-6 col-md-5">
@@ -88,28 +83,30 @@
                <div class="row">
                    <div class="col-lg-3 col-md-3">
                        <div class="header__logo">
-                           <a href="/"><h3 id="abcd">flower hub</h3></a>
+                           <a href="/"><h3 class="StylishFont">flower hub</h3></a>
                        </div>
                    </div>
-                   <div class="col-lg-6 col-md-6">
+                   <div class="col-lg-9 col-md-9">
                        <nav class="header__menu mobile-menu">
                            <ul>
                                <li class="{% if active == 'index' %}active{%endif %}"><a href="/">Home</a></li>
                                <li class="{% if active == 'blog' %}active{%endif %}" ><a href="/blog">Blog</a></li>
                                <li class="{% if active == 'about' %}active{%endif %}"><a href="/about">About us</a></li>
                                <li class="{% if active == 'contact' %}active{%endif %}"><a href="/contact">Contact us</a></li>
+                               <li class="{% if active == 'admin' %}active{%endif %}"><a href="/admin">Admin</a></li>
+                               <li class="{% if active == 'allusers' %}active{%endif %}"><a href="/allusers">Users</a></li>
                            </ul>
                        </nav>
                    </div>
 
-                   <div class="col-lg-3 col-md-3">
+                   <!-- <div class="col-lg-2 col-md-2">
                        <div class="header__nav__option">
-                           <!-- <a href="#" class="search-switch"><img src="../static/img/icon/search.png" alt=""></a>
+                           <a href="#" class="search-switch"><img src="../static/img/icon/search.png" alt=""></a>
                            <a href="#"><img src="../static/img/icon/heart.png" alt=""></a>
                            <a href="#"><img src="../static/img/icon/cart.png" alt=""> <span>0</span></a>
-                           <div class="price">$0.00</div> -->
+                           <div class="price">$0.00</div>
                        </div>
-                   </div>
+                   </div> -->
                </div>
                <div class="canvas__open"><i class="fa fa-bars"></i></div>
            </div>
@@ -129,10 +126,10 @@
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="footer__about">
                     <div class="footer__logo">
-                        <a href="#"><img src="../static/img/footer-logo.png" alt=""></a>
+                        <a href="/"><h3 class="StylishFont text-white">flower hub</h3></a>
                     </div>
                     <p>The customer is at the heart of our unique business model, which includes design.</p>
-                    <a href="#"><img src="../static/img/payment.png" alt=""></a>
+                    <!-- <a href="#"><img src="../static/img/payment.png" alt=""></a> -->
                 </div>
             </div>
             <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
