@@ -54,14 +54,20 @@
 
             </tbody> -->
             <thead>
+              
               <tr>
                 <th>image</th>
               </tr>
+              
             </thead>
             <tbody>
+              {% for img in images %}
               <tr>
-                <td><img src="{{ url_for('display_image', filename=filename) }}"></td>
+                <td>
+                  <img src="{{url_for('static', filename='uploads/'+img.name)}}" />
+                </td>
               </tr>
+              {% endfor %}
             </tbody>
           </table>
     </div>

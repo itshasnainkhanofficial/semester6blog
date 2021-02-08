@@ -29,4 +29,7 @@ class flowerModel(db.Model):
     def __repr__(self):
         return  "<Task %r>" % self.id
 
+class Img(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text, nullable=False)
 

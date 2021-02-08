@@ -1,15 +1,17 @@
-from flask import Flask , render_template , redirect , url_for ,request , flash
+from flask import Flask , render_template , redirect , url_for ,request , flash ,Response
 from flask_sqlalchemy import SQLAlchemy
 import bcrypt
 from db import db_init, db
-from models import flowerModel , UserModel
+from models import flowerModel , UserModel ,Img
 from werkzeug.utils import secure_filename
 import os
+import base64
+
 app = Flask(__name__)
 
 app.config.from_pyfile('config.py')
 
-UPLOAD_FOLDER = 'static/uploads/'
+UPLOAD_FOLDER = 'static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
@@ -57,7 +59,9 @@ def signup():
 @app.route("/admin")
 def admin():
 
-    return render_template("admin.html" , active='admin')
+    AllImages = Img.query.order_by(Img.id).all()
+    print(AllImages)
+    return render_template("admin.html" , active='admin' , images = AllImages)
 
 
 @app.route('/allusers')
@@ -122,29 +126,56 @@ def SigninUser():
                 flash("Welcome")
                 return redirect(url_for("admin"))
 
-@app.route('/addflower' , methods=["GET", "POST"])
-def upload_image():
-	if 'flowerimage' not in request.files:
-		flash('No file part')
-		return redirect(request.url)
-	file = request.files['flowerimage']
-	if file.filename == '':
-		flash('No image selected for uploading')
-		return redirect(request.url)
-	if file and allowed_file(file.filename):
-		filename = secure_filename(file.filename)
-		file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-		#print('upload_image filename: ' + filename)
-		flash('Image successfully uploaded and displayed below')
-		return render_template('admin.html', filename=filename)
-	else:
-		flash('Allowed image types are -> png, jpg, jpeg, gif')
-		return redirect(request.url)
+# @app.route('/addflower' , methods=["GET", "POST"])
+# def upload_image():
+# 	if 'flowerimage' not in request.files:
+# 		flash('No file part')
+# 		return redirect(request.url)
+# 	file = request.files['flowerimage']
+# 	if file.filename == '':
+# 		flash('No image selected for uploading')
+# 		return redirect(request.url)
+# 	if file and allowed_file(file.filename):
+# 		filename = secure_filename(file.filename)
+# 		file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+# 		#print('upload_image filename: ' + filename)
+# 		flash('Image successfully uploaded and displayed below')
+# 		return render_template('admin.html', filename=filename)
+# 	else:
+# 		flash('Allowed image types are -> png, jpg, jpeg, gif')
+# 		return redirect(request.url)
 
-@app.route('/display/<filename>')
-def display_image(filename):
-	#print('display_image filename: ' + filename)
-	return redirect(url_for('static', filename='uploads/' + filename), code=301)
+# @app.route('/display/<filename>')
+# def display_image(filename):
+# 	print('display_image filename: ' + filename)
+# 	return redirect(url_for('static', filename='uploads/' + filename), code=301)
+
+@app.route('/addflower', methods=['POST'])
+def upload():
+    pic = request.files['flowerimage']
+    if not pic:
+        return 'No pic uploaded!', 400
+
+    filename = secure_filename(pic.filename)
+
+
+    img = Img( name=filename)
+    pic.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    print(img)
+    db.session.add(img)
+    db.session.commit()
+
+    return redirect(url_for("admin"))
+
+# @app.route('/<int:id>')
+# def get_img(id):
+#     img = Img.query.filter_by(id=id).first()
+#     if not img:
+#         return 'Img Not Found!', 404
+
+#     print(img.mimetype)
+#     return Response(img.img, mimetype=img.mimetype)
+
 
 if __name__ == '__main__':
     app.run()
