@@ -1,38 +1,22 @@
 from flask import Flask , render_template , redirect , url_for ,request , flash
 from flask_sqlalchemy import SQLAlchemy
 import bcrypt
-from datetime import datetime
-
+from db import db_init, db
+from models import flowerModel , UserModel
+from werkzeug.utils import secure_filename
+import os
 app = Flask(__name__)
 
 app.config.from_pyfile('config.py')
 
-db = SQLAlchemy(app)
+UPLOAD_FOLDER = 'static/uploads/'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
-
-# class for register model
-
-class UserModel(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(200), nullable=False)
-    useremail = db.Column(db.String(200), nullable=False , unique= True)
-    userpassword = db.Column(db.String(900), nullable=False)
-    date_created = db.Column(db.DateTime , default = datetime.utcnow)
-
-    def __repr__(self):
-        return  "<Task %r>" % self.id
-
-# class for flower model
-
-class flowerModel(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    flowername = db.Column(db.String(200), nullable=False)
-    flowerdescription = db.Column(db.String(200), nullable=False)
-    flowerimage = db.Column(db.String(100),nullable=False  , unique= True)
-    flower_date_created = db.Column(db.DateTime , default = datetime.utcnow)
-
-    def __repr__(self):
-        return  "<Task %r>" % self.id
+def allowed_file(filename):
+	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+	
+db_init(app)
 
 
 
@@ -70,7 +54,9 @@ def signup():
 
 @app.route("/admin")
 def admin():
+
     return render_template("admin.html" , active='admin')
+
 
 @app.route('/allusers')
 def allusers():
@@ -136,29 +122,7 @@ def SigninUser():
 
 @app.route('/addflower' , methods=["GET", "POST"])
 def addflower():
-    if request.method == "POST":
-        flowername = request.form['flowername']
-        description = request.form['flowerdescription']
-        flowerimage = request.form['flowerimage']
-
-        flowerPreeset = flowerModel.query.filter_by(flowername = flowername).first()
-        if flowerPreeset:
-            flash("This flower already exists")
-            return redirect(url_for("admin"))
-
-        addedflower = flowerModel(flowername = flowername, flowerdescription = description, flowerimage = flowerimage)
-
-        try:
-            db.session.add(addedflower)
-            db.session.commit()
-            flash("your flower successfylly added")
-            return redirect("blog")
-        except Exception as e:
-            print(e)
-            return "Error occur during flower adding"
-
-    else:
-        return redirect("blog")
+    print("add flower")
 
 
 

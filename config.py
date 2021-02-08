@@ -11,3 +11,4 @@ DEBUG = True
 FLASK_ENV = 'development'
 SECRET_KEY = environ.get('SECRET_KEY')
 SQLALCHEMY_DATABASE_URI = 'sqlite:///database.db'
+UPLOAD_LOCATION = "D:\\web development\\semester6project\\static\\uploadedimg"
