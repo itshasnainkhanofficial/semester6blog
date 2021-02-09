@@ -176,5 +176,32 @@ def upload():
         return redirect("/blog")
 
 
+@app.route("/delete/<int:id>")
+def delete(id):
+
+    Image = Img.query.filter_by(id = id).first()
+    
+    try:
+        db.session.delete(Image)
+        db.session.commit()
+        os.remove(os.path.join(app.config['UPLOAD_FOLDER'], Image.name))
+        flash("You have deleted image successfully !")
+        return redirect("/admin")
+    except Exception as e:
+            print(e)
+            return "Error occur during deleting image"
+
+
+
 if __name__ == '__main__':
     app.run()
+
+
+
+# @app.route("/delete", methods=["POST"])
+# def delete():
+#     title = request.form.get("title")
+#     book = Book.query.filter_by(title=title).first()
+#     db.session.delete(book)
+#     db.session.commit()
+#     return redirect("/")
