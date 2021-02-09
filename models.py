@@ -17,19 +17,16 @@ class UserModel(db.Model):
     def __repr__(self):
         return  "<Task %r>" % self.id
 
-# class for flower model
+# class for Img model
 
-class flowerModel(db.Model):
+class Img(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text, nullable=False)
     writtenflowername = db.Column(db.String(200), nullable=False)
     flowerdescription = db.Column(db.String(200), nullable=False)
-    originalflowerimagename = db.Column(db.Text, unique=True, nullable=False)
     flower_date_created = db.Column(db.DateTime , default = datetime.utcnow)
 
     def __repr__(self):
         return  "<Task %r>" % self.id
 
-class Img(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Text, nullable=False)
 

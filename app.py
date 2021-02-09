@@ -1,75 +1,114 @@
-from flask import Flask , render_template , redirect , url_for ,request , flash ,Response
+from flask import Flask , render_template , redirect , url_for ,request , flash 
 from flask_sqlalchemy import SQLAlchemy
 import bcrypt
 from db import db_init, db
-from models import flowerModel , UserModel ,Img
+from models import  UserModel ,Img
 from werkzeug.utils import secure_filename
 import os
-import base64
 
 app = Flask(__name__)
 
 app.config.from_pyfile('config.py')
 
-UPLOAD_FOLDER = 'static/uploads'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
-
-
-def allowed_file(filename):
-	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-	
 db_init(app)
 
+# adding flower method
+def addFlower():
+    flowername = request.form["flowername"]
+    flowerdescription = request.form["flowerdescription"]
+    pic = request.files['flowerimage']
+
+    if not flowername and not flowerdescription and not pic:
+        flash("You did not add anything in blog")
+        return redirect(url_for("admin"))
+
+    if not flowername:
+        flash("kindly Add flower name")
+        return redirect(url_for("admin"))
+
+    if not flowerdescription:
+        flash("kindly Add flower description")
+        return redirect(url_for("admin"))
+
+    if not pic:
+        flash("kindly select a picture of flower")
+        return redirect(url_for("admin"))
+
+    picture = Img.query.filter_by(name=pic.filename).first()
+
+    if picture:
+        flash("This picture already exits, kindly select another picture")
+        return redirect(url_for("admin"))
+
+    filename = secure_filename(pic.filename)
+
+    img = Img( name=filename , writtenflowername = flowername , flowerdescription = flowerdescription)
+
+    pic.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+    try:
+        db.session.add(img)
+        db.session.commit()
+        flash("You flower added successfully !")
+        return redirect("admin")
+    except Exception as e:
+        print(e)
+        return "Error occur during Adding flower"
 
 
+    return redirect(url_for("admin"))
+
+
+# default route when app starts
 @app.route('/')
 def index():
     return render_template("index.html" , active='index')
 
 
-
+# home route
 @app.route("/home")
 def home():
     return render_template("index.html" , active='index')
 
+# about us route
 @app.route("/about")
 def about():
     return render_template("about.html" , active='about')
 
+# blog route
 @app.route("/blog")
 def blog():
-    return render_template("blog.html" , active='blog')
+    AllImages = Img.query.order_by(Img.id).all()
+    return render_template("blog.html" , active='blog' , images = AllImages  )
 
+# contact us route
 @app.route("/contact")
 def contact():
     return render_template("contact.html" , active='contact')
 
+# sign in route
 @app.route("/signin")
 def signin():
     return render_template("signin.html" , active='signin')
 
-
+# sign up route
 @app.route("/signup")
 def signup():
     return render_template("signup.html" , active='signup')
 
-
+# admin route
 @app.route("/admin")
 def admin():
-
     AllImages = Img.query.order_by(Img.id).all()
-    print(AllImages)
     return render_template("admin.html" , active='admin' , images = AllImages)
 
-
+# showing all users
 @app.route('/allusers')
 def allusers():
     AllUsers = UserModel.query.order_by(UserModel.date_created).all()
     return render_template("allUsers.html" ,  allusers = AllUsers , active='allusers')
 
-
+# sign up user
 @app.route('/SignupUser' , methods=["GET", "POST"])
 def SignupUser():
     if request.method == "POST":
@@ -104,6 +143,7 @@ def SignupUser():
     else:
         return redirect("/blog")
 
+# sign in user
 @app.route('/SigninUser' , methods=["GET", "POST"])
 def SigninUser():
     if request.method == "POST":
@@ -126,55 +166,14 @@ def SigninUser():
                 flash("Welcome")
                 return redirect(url_for("admin"))
 
-# @app.route('/addflower' , methods=["GET", "POST"])
-# def upload_image():
-# 	if 'flowerimage' not in request.files:
-# 		flash('No file part')
-# 		return redirect(request.url)
-# 	file = request.files['flowerimage']
-# 	if file.filename == '':
-# 		flash('No image selected for uploading')
-# 		return redirect(request.url)
-# 	if file and allowed_file(file.filename):
-# 		filename = secure_filename(file.filename)
-# 		file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-# 		#print('upload_image filename: ' + filename)
-# 		flash('Image successfully uploaded and displayed below')
-# 		return render_template('admin.html', filename=filename)
-# 	else:
-# 		flash('Allowed image types are -> png, jpg, jpeg, gif')
-# 		return redirect(request.url)
 
-# @app.route('/display/<filename>')
-# def display_image(filename):
-# 	print('display_image filename: ' + filename)
-# 	return redirect(url_for('static', filename='uploads/' + filename), code=301)
-
+# route for adding flower to database
 @app.route('/addflower', methods=['POST'])
 def upload():
-    pic = request.files['flowerimage']
-    if not pic:
-        return 'No pic uploaded!', 400
-
-    filename = secure_filename(pic.filename)
-
-
-    img = Img( name=filename)
-    pic.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    print(img)
-    db.session.add(img)
-    db.session.commit()
-
-    return redirect(url_for("admin"))
-
-# @app.route('/<int:id>')
-# def get_img(id):
-#     img = Img.query.filter_by(id=id).first()
-#     if not img:
-#         return 'Img Not Found!', 404
-
-#     print(img.mimetype)
-#     return Response(img.img, mimetype=img.mimetype)
+    if request.method == "POST":
+        return addFlower()
+    else:
+        return redirect("/blog")
 
 
 if __name__ == '__main__':

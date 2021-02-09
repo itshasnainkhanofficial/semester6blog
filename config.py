@@ -15,4 +15,4 @@ SQLALCHEMY_DATABASE_URI = 'sqlite:///database.db'
 # FSADeprecationWarning: SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and will be disabled by default in the future.  Set it to True or False to suppress this warning
 SQLALCHEMY_TRACK_MODIFICATIONS = False 
 
-UPLOAD_LOCATION = "D:\\web development\\semester6project\\static\\uploadedimg"
+UPLOAD_FOLDER = "static/uploads"

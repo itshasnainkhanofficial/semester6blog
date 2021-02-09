@@ -26,7 +26,7 @@
 
     <div class="col-12">
         <table class="table table-bordered">
-            <!-- <thead>
+            <thead>
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">name</th>
@@ -35,39 +35,30 @@
                 <th scope="col">date</th>
                 <th scope="col">Actions</th>
               </tr>
-            </thead> -->
-            <!-- <tbody>
-                {% for flower in allFlowers %}
+            </thead>
+            <tbody>
+              {% if images %}
+                {% for flower in images %}
                 <tr>
                   <th scope="row">{{flower.id}}</th>
-                  <td>{{flower.flowername}}</td>
+                  <td>{{flower.name}}</td>
                   <td>{{flower.flowerdescription}}</td>
-                  <td><img src="{{url_for('static',filename = flower.filename)}}" width="500" height="300">
-                    </td>
+                  <td>
+                    <img src="{{url_for('static', filename='uploads/'+flower.name)}}"class="img-fluid" />
+                  </td>
                   <td>{{flower.flower_date_created.date()}}</td>
                   <td>
                     <button type="button" class="btn btn-outline-primary btn-sm">Update</button>
                     <button type="button" class="btn btn-outline-danger btn-sm">delete</button>
                   </td>
                 </tr>
-                {% endfor %}
+                  {% endfor %}
+                {% else %}
+                <tr>
+                  <td colspan="6" class="text-center">No flower available</td>
+                </tr>
+                {% endif %}
 
-            </tbody> -->
-            <thead>
-              
-              <tr>
-                <th>image</th>
-              </tr>
-              
-            </thead>
-            <tbody>
-              {% for img in images %}
-              <tr>
-                <td>
-                  <img src="{{url_for('static', filename='uploads/'+img.name)}}" />
-                </td>
-              </tr>
-              {% endfor %}
             </tbody>
           </table>
     </div>
