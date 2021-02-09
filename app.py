@@ -190,6 +190,7 @@ def delete(id):
     except Exception as e:
             print(e)
             return "Error occur during deleting image"
+        
 
 
 @app.route("/updateFlower" , methods=['POST'])
@@ -201,28 +202,23 @@ def update():
         dataFromId.writtenflowername = request.form['flowername']
         dataFromId.flowerdescription = request.form['flowerdescription']
         flowerImg = request.files['flowerimage']
+        imagefromid = dataFromId.name
 
         if flowerImg:
             filename = secure_filename(flowerImg.filename)
             dataFromId.name = filename
             flowerImg.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], dataFromId.name))
-
-        db.session.commit()
-        
-        return redirect("/admin")
+            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], imagefromid))
+        try:
+            db.session.commit()
+            flash("You have updated successfully !")
+            return redirect("/admin")
+        except Exception as e:
+            print(e)
+            return "Error occur during updating post"
     else :
         return redirect("/blog")
 
+
 if __name__ == '__main__':
     app.run()
-
-
-
-# @app.route("/delete", methods=["POST"])
-# def delete():
-#     title = request.form.get("title")
-#     book = Book.query.filter_by(title=title).first()
-#     db.session.delete(book)
-#     db.session.commit()
-#     return redirect("/")
