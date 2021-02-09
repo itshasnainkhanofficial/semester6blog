@@ -31,3 +31,4 @@ pip install pylint-flask-sqlalchemy
 https://pypi.org/project/python-dotenv/
 
 pip install python-dotenv
+pip install flask-mail
