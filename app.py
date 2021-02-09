@@ -192,9 +192,27 @@ def delete(id):
             return "Error occur during deleting image"
 
 
-# @app.route("/delete/<int:id>")
-# def delete(id):
-#     Image = Img.query.filter_by(id = id).first()
+@app.route("/updateFlower" , methods=['POST'])
+def update():
+    if request.method == 'POST':
+
+        dataFromId = Img.query.get(request.form.get('id'))
+
+        dataFromId.writtenflowername = request.form['flowername']
+        dataFromId.flowerdescription = request.form['flowerdescription']
+        flowerImg = request.files['flowerimage']
+
+        if flowerImg:
+            filename = secure_filename(flowerImg.filename)
+            dataFromId.name = filename
+            flowerImg.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], dataFromId.name))
+
+        db.session.commit()
+        
+        return redirect("/admin")
+    else :
+        return redirect("/blog")
 
 if __name__ == '__main__':
     app.run()

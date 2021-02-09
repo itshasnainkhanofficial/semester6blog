@@ -3,112 +3,166 @@
 
 {% with messages = get_flashed_messages() %}
 {% if messages %}
-  {% for msg in messages %}
+{% for msg in messages %}
 
-  <div class="alert alert-danger alert-dismissible fade show" role="alert">
-    <strong>{{msg}}</strong>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+  <strong>{{msg}}</strong>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
 
-  {% endfor %}
+{% endfor %}
 {% endif %}
 {% endwith %}
 
 <div class="d-flex justify-content-end p-3">
-    <button type="button" class="site-btn" data-toggle="modal" data-target="#postAdd"><i class="fa fa-plus-square pr-2"></i>Add Flower</button>
+  <button type="button" class="site-btn" data-toggle="modal" data-target="#postAdd"><i
+      class="fa fa-plus-square pr-2"></i>Add Flower</button>
 </div>
 
 <div class="container-fluid">
-    
-    <div class="row p-5">
+
+  <div class="row p-5">
 
     <div class="col-12">
-        <table id="blogTable" class="table table-bordered">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">name</th>
-                <th scope="col">discription</th>
-                <th scope="col">image</th>
-                <th scope="col">date</th>
-                <th scope="col">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% if images %}
-                {% for flower in images %}
-                <tr>
-                  <th scope="row">{{flower.id}}</th>
-                  <td>{{flower.writtenflowername}}</td>
-                  <td>{{flower.flowerdescription}}</td>
-                  <td>
-                    <img src="{{url_for('static', filename='uploads/'+flower.name)}}"class="img-fluid" />
-                  </td>
-                  <td>{{flower.flower_date_created.date()}}</td>
-                  <td>
-                    <a href="update/{{flower.id}}" class="btn btn-outline-primary btn-sm">Update</a>
-                    <a href="delete/{{flower.id}}" class="btn btn-outline-danger btn-sm" >delete</a>
-                  </td>
-                </tr>
-                  {% endfor %}
-                {% else %}
-                <tr>
-                  <td colspan="6" class="text-center">No flower available</td>
-                </tr>
-                {% endif %}
+      <table id="blogTable" class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">name</th>
+            <th scope="col">discription</th>
+            <th scope="col">image</th>
+            <th scope="col">date</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if images %}
+          {% for flower in images %}
+          <tr>
+            <th scope="row">{{flower.id}}</th>
+            <td>{{flower.writtenflowername}}</td>
+            <td>{{flower.flowerdescription}}</td>
+            <td>
+              <img src="{{url_for('static', filename='uploads/'+flower.name)}}" class="img-fluid" />
+            </td>
+            <td>{{flower.flower_date_created.date()}}</td>
+            <td>
+              <a href="update/{{flower.id}}" class="btn btn-outline-primary btn-sm" data-toggle="modal"
+                data-target="#modaledit{{flower.id}}"> Update</a>
+              <a href="delete/{{flower.id}}" class="btn btn-outline-danger btn-sm">delete</a>
+            </td>
+          </tr>
+          <!-- update post -->
+          <div class="modal fade" id="modaledit{{flower.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Edit Flower</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
 
-            </tbody>
-          </table>
-    </div>
-</div>
-</div>
+                  <div class="container-fluid">
+                    <div class="row p-3">
+                      <div class="col-lg-12">
+                        <div class="contact__form">
+                          <form action="/updateFlower" method="POST" enctype="multipart/form-data">
+                            <div class="row">
+                              <div class="col-lg-12">
+                                <input type="hidden" name="id" value="{{flower.id}}">
+                                <input type="text" placeholder="flowername" name="flowername"
+                                  value="{{flower.writtenflowername}}">
+                              </div>
+                              <div class="col-lg-12">
+                                <textarea placeholder="Description"
+                                  name="flowerdescription">{{flower.flowerdescription}}</textarea>
+                              </div>
+                              <div class="col-lg-12">
+                                <label for="exampleFormControlFile1">Select Flower</label>
+                                <input type="file" accept="image/*" class="form-control-file"
+                                  id="exampleFormControlFile1" name="flowerimage">
+                              </div>
+                            </div>
 
-
-
-  <!-- Add post Modal -->
-  <div class="modal fade" id="postAdd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add Flower</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          
-<div class="container-fluid">
-    <div class="row p-3">
-        <div class="col-lg-12">
-            <div class="contact__form">
-                <form action="/addflower" method="POST" enctype="multipart/form-data">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <input type="text" placeholder="flowername" name="flowername">
                         </div>
-                        <div class="col-lg-12">
-                            <textarea placeholder="Description" name="flowerdescription"></textarea>
-                        </div>
-                        <div class="col-lg-12">
-                            <label for="exampleFormControlFile1">Select Flower</label>
-                            <input type="file" accept="image/*" class="form-control-file" id="exampleFormControlFile1" name="flowerimage">
-                          </div>
+                      </div>
                     </div>
-                
-            </div>
-        </div>
-    </div>
-</div>
+                  </div>
 
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="site-btn" data-dismiss="modal">Close</button>
-          <button type="submit" class="site-btn">Save post</button>
-        </div>
-    </form>
-      </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="site-btn" data-dismiss="modal">Close</button>
+                  <button type="submit" class="site-btn">Update post</button>
+                </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+          {% else %}
+          <tr>
+            <td colspan="6" class="text-center">No flower available</td>
+          </tr>
+          {% endif %}
+
+        </tbody>
+      </table>
     </div>
   </div>
+</div>
+
+
+
+<!-- Add post Modal -->
+<div class="modal fade" id="postAdd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Flower</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div class="container-fluid">
+          <div class="row p-3">
+            <div class="col-lg-12">
+              <div class="contact__form">
+                <form action="/addflower" method="POST" enctype="multipart/form-data">
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <input type="text" placeholder="flowername" name="flowername">
+                    </div>
+                    <div class="col-lg-12">
+                      <textarea placeholder="Description" name="flowerdescription"></textarea>
+                    </div>
+                    <div class="col-lg-12">
+                      <label for="exampleFormControlFile1">Select Flower</label>
+                      <input type="file" accept="image/*" class="form-control-file" id="exampleFormControlFile1"
+                        name="flowerimage">
+                    </div>
+                  </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="site-btn" data-dismiss="modal">Close</button>
+        <button type="submit" class="site-btn">Save post</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
 {% endblock %}
