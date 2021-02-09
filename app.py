@@ -192,6 +192,9 @@ def delete(id):
             return "Error occur during deleting image"
 
 
+# @app.route("/delete/<int:id>")
+# def delete(id):
+#     Image = Img.query.filter_by(id = id).first()
 
 if __name__ == '__main__':
     app.run()
