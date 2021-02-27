@@ -5,7 +5,7 @@ from db import db_init, db
 from models import  UserModel ,Img
 from werkzeug.utils import secure_filename
 import os
-from flask_mail import Mail
+# from flask_mail import Mail
 app = Flask(__name__)
 
 app.config.from_pyfile('config.py')
